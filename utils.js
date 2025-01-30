@@ -1,1 +1,2 @@
-module.exports.urlRegExp = /^(https?:\/\/)?([\da-z0-9.-]+)\.([a-z.]{2,6})/; // ([/\w.-]*)*$
+module.exports.urlRegExp = /^(https?:\/\/)?(www.)?([\da-z.-]+)\.([a-z.]{2,6})([a-zA-Z\d-.%_~:/?#[\]@!$&'()*+,;=]*)$/;
+module.exports.mongoDublicateErrorCode = 11000;
