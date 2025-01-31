@@ -92,6 +92,9 @@ module.exports = {
   },
   updateUserProfile: (req, res, next) => {
     const { name, about } = req.body;
+    if (!name && !about) {
+      throw new ValidationError('Переданы некорректные данные');
+    }
     User.findByIdAndUpdate(
       req.user._id,
       { name, about },
@@ -113,6 +116,9 @@ module.exports = {
   },
   updateUserAvatar: (req, res, next) => {
     const { avatar } = req.body;
+    if (!avatar) {
+      throw new ValidationError('Переданы некорректные данные');
+    }
     User.findByIdAndUpdate(
       req.user._id,
       { avatar },
