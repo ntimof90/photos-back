@@ -15,6 +15,9 @@ module.exports = {
       about,
       avatar,
     } = req.body;
+    if (!password) {
+      throw new ValidationError('Переданы некорректные данные');
+    }
     bcrypt.hash(password, 10)
       .then((hash) => User.create({
         email,
@@ -70,5 +73,63 @@ module.exports = {
         res.send(user);
       })
       .catch(next);
+  },
+  findUser: (req, res, next) => {
+    User.findById(req.params.userId)
+      .then((user) => {
+        if (!user) {
+          throw new NotFoundError('Запрашиваемый пользователь не найден');
+        }
+        res.send(user);
+      })
+      .catch((err) => {
+        if (err.name === 'CastError') {
+          next(new ValidationError('Переданы некорректные данные'));
+          return;
+        }
+        next(err);
+      });
+  },
+  updateUserProfile: (req, res, next) => {
+    const { name, about } = req.body;
+    User.findByIdAndUpdate(
+      req.user._id,
+      { name, about },
+      { runValidators: true, new: true },
+    )
+      .then((user) => {
+        if (!user) {
+          throw new NotFoundError('Запрашиваемый пользователь не найден');
+        }
+        res.send(user);
+      })
+      .catch((err) => {
+        if (err.name === 'ValidationError') {
+          next(new ValidationError('Переданы некорректные данные'));
+          return;
+        }
+        next(err);
+      });
+  },
+  updateUserAvatar: (req, res, next) => {
+    const { avatar } = req.body;
+    User.findByIdAndUpdate(
+      req.user._id,
+      { avatar },
+      { runValidators: true, new: true },
+    )
+      .then((user) => {
+        if (!user) {
+          throw new NotFoundError('Запрашиваемый пользователь не найден');
+        }
+        res.send(user);
+      })
+      .catch((err) => {
+        if (err.name === 'ValidationError') {
+          next(new ValidationError('Переданы некорректные данные'));
+          return;
+        }
+        next(err);
+      });
   },
 };
