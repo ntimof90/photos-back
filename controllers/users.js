@@ -5,6 +5,7 @@ const NotFoundError = require('../errors/not-found-error');
 const ValidationError = require('../errors/validation-error');
 const ConflictError = require('../errors/conflict-error');
 const { mongoDublicateErrorCode } = require('../utils');
+const { JWT_KEY } = require('../config');
 
 module.exports = {
   createUser: (req, res, next) => {
@@ -51,7 +52,7 @@ module.exports = {
             }
             const token = jwt.sign(
               { _id: user._id },
-              'dev-key',
+              JWT_KEY,
               { expiresIn: '7d' },
             );
             res.send({ token });
