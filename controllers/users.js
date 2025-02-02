@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const escape = require('escape-html');
 const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-error');
 const ValidationError = require('../errors/validation-error');
@@ -27,7 +28,18 @@ module.exports = {
         avatar,
         password: hash,
       }))
-      .then((user) => res.send(user))
+      .then((user) => {
+        const token = jwt.sign(
+          { _id: user._id },
+          JWT_KEY,
+          { expiresIn: '7d' },
+        );
+        res.cookie('jwt', token, {
+          httpOnly: true,
+          sameSite: true,
+          maxAge: 3600000 * 24 * 7,
+        }).send(user);
+      })
       .catch((err) => {
         if (err.name === 'ValidationError') {
           next(new ValidationError('Переданы некорректные данные'));
@@ -55,7 +67,11 @@ module.exports = {
               JWT_KEY,
               { expiresIn: '7d' },
             );
-            res.send({ token });
+            res.cookie('jwt', token, {
+              httpOnly: true,
+              sameSite: true,
+              maxAge: 3600000 * 24 * 7,
+            }).end();
           });
       })
       .catch(next);
@@ -98,7 +114,7 @@ module.exports = {
     }
     User.findByIdAndUpdate(
       req.user._id,
-      { name, about },
+      { name: escape(name), about: escape(about) },
       { runValidators: true, new: true },
     )
       .then((user) => {

@@ -1,3 +1,4 @@
+const escape = require('escape-html');
 const ForbiddenError = require('../errors/forbidden-error');
 const NotFoundError = require('../errors/not-found-error');
 const ValidationError = require('../errors/validation-error');
@@ -13,7 +14,7 @@ module.exports = {
   },
   createCard: (req, res, next) => {
     const { name, link } = req.body;
-    Card.create({ name, link, owner: req.user._id })
+    Card.create({ name: escape(name), link, owner: req.user._id })
       .then((card) => res.send(card))
       .catch((err) => {
         if (err.name === 'ValidationError') {
