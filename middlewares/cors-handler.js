@@ -7,7 +7,6 @@ module.exports = (req, res, next) => {
   }
   if (req.method === 'OPTIONS') {
     res.set('access-control-allow-methods', allowedMethods);
-    console.log(allowedMethods);
     res.set('access-control-allow-headers', req.headers['access-control-request-headers']);
     res.end();
     return;

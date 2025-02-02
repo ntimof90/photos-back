@@ -14,4 +14,5 @@ module.exports = {
   MONGO_URL,
   JWT_KEY: NODE_ENV === 'production' ? JWT_KEY : 'dev-key',
   allowedCors,
+  allowedMethods,
 };
