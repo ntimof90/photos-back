@@ -6,7 +6,7 @@ const rateLimiter = require('express-rate-limit');
 
 const router = require('./routes');
 const errorHandler = require('./middlewares/error-handler');
-const { MONGO_URL, PORT } = require('./config');
+const { MONGO_URL, PORT, allowedCors } = require('./config');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const corsHandler = require('./middlewares/cors-handler');
 
@@ -14,7 +14,7 @@ const app = express(); // const app = require('http').createServer()
 mongoose.connect(MONGO_URL, {
   family: 4,
 });
-app.use(corsHandler);
+app.use(corsHandler({ origins: allowedCors }));
 app.use(rateLimiter({ windowMs: 15 * 60 * 1000, max: 100 }));
 app.use(requestLogger);
 app.use(cookieParser());
