@@ -19,9 +19,9 @@ module.exports = (options) => {
     if (origins === '*') res.set('access-control-allow-origin', origins);
     if (origins.includes(origin)) {
       res.set('access-control-allow-origin', origin);
+      res.set('access-control-allow-credentials', true);
     }
     if (req.method === 'OPTIONS') {
-      res.set('access-control-allow-credentials', 'true');
       res.set('access-control-allow-methods', methods);
       res.set('access-control-allow-headers', req.headers['access-control-request-headers']);
       res.end();
