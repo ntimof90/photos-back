@@ -36,7 +36,7 @@ module.exports = {
         );
         res.cookie('jwt', token, {
           httpOnly: true,
-          sameSite: true,
+          // sameSite: true,
           maxAge: 3600000 * 24 * 7,
         }).send(user);
       })
