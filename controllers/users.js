@@ -36,9 +36,8 @@ module.exports = {
         );
         res.cookie('jwt', token, {
           httpOnly: true,
-          sameSite: 'None',
           maxAge: 3600000 * 24 * 7,
-        }).send(user);
+        }).send({ token, user });
       })
       .catch((err) => {
         if (err.name === 'ValidationError') {
@@ -69,9 +68,9 @@ module.exports = {
             );
             res.cookie('jwt', token, {
               httpOnly: true,
-              sameSite: 'None',
               maxAge: 3600000 * 24 * 7,
-            }).end();
+            });
+            res.send({ token });
           });
       })
       .catch(next);
