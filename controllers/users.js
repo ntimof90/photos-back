@@ -36,7 +36,7 @@ module.exports = {
         );
         res.cookie('jwt', token, {
           httpOnly: true,
-          // sameSite: true,
+          sameSite: false,
           maxAge: 3600000 * 24 * 7,
         }).send(user);
       })
@@ -69,7 +69,7 @@ module.exports = {
             );
             res.cookie('jwt', token, {
               httpOnly: true,
-              // sameSite: true,
+              sameSite: false,
               maxAge: 3600000 * 24 * 7,
             }).end();
           });
